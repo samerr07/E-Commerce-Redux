@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import PageHeading from '../common/PageHeading'
 import { decreaseQty, increaseQty, removeFromCart } from '../redux/cartSlice'
+import StripeCheckout from 'react-stripe-checkout'
 
 const Cart = () => {
 
@@ -25,8 +26,11 @@ const Cart = () => {
     dispatch(removeFromCart(id))
   }
 
- 
+  const publishKey = "pk_test_51BTUDGJAJfZb9HEBwDg86TN1KNprHjkfipXmEDMb0gSCassK5T3ZfxsAbcgKVmAIXF7oZ6ItlZZbXO6idTHE67IM007EwQ4uN3"
   
+  const onToken = (token)=>{
+    console.log(token)
+  }
   
   return (
     <div>
@@ -112,8 +116,16 @@ const Cart = () => {
                     </div>
 
                     <div className='whitespace-nowrap mt-4 flex items-center justify-between'>
-                      <div className='px-4 py-2 bg-red-800 rounded-lg text-white'>
-                        <Link>Proceed to Checkout</Link>
+                      <div className=''>
+                        <StripeCheckout
+                          token={onToken}
+                          stripeKey={publishKey}
+                          amount={(totalPrice + 10)*100} // Amount in cents
+                          name="MD"
+                          currency="USD"
+                          label="Proceed To Checkout"
+                          className="px-4 py-2 bg-red-800 rounded-lg text-white"
+                        />
                       </div >
                       <div className='px-4 py-2 bg-red-800 rounded-lg text-white'>
                         <Link to={"/shop"}>Continue Shopping</Link>
